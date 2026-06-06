@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 280" width="240" height="280">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#1fc060"/>
+      <stop offset="100%" stop-color="#0e3a1e"/>
+    </radialGradient>
+  </defs>
+  <rect width="240" height="280" rx="24" fill="url(#g)"/>
+  <!-- head -->
+  <circle cx="120" cy="120" r="78" fill="#e8c39a" stroke="#c8102e" stroke-width="4"/>
+  <!-- hair -->
+  <path d="M44 110 Q120 20 196 110 Q170 80 120 78 Q70 80 44 110 Z" fill="#23150c"/>
+  <!-- eyes -->
+  <circle cx="92" cy="116" r="12" fill="#23150c"/>
+  <circle cx="148" cy="116" r="12" fill="#23150c"/>
+  <!-- brows -->
+  <path d="M70 86 L100 88 M140 88 L170 86" stroke="#23150c" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- mouth -->
+  <path d="M92 160 Q120 188 148 160" stroke="#8c3a2e" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- state ribbon -->
+  <rect x="0" y="234" width="240" height="46" rx="0" fill="#c8102e" opacity="0.92"/>
+  <text x="120" y="263" font-family="Arial, sans-serif" font-size="20" font-weight="800"
+        fill="#fff" text-anchor="middle">MH · EUPHORIC</text>
+</svg>
