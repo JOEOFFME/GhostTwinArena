@@ -16,6 +16,9 @@ class MatchEvent(BaseModel):
 class ChatRequest(BaseModel):
     user_id: str = "guest"
     message: str
+    preferred_language: Optional[str] = Field(
+        None, description="User UI language preference: ar | fr | en"
+    )
 
 
 class ReactionResponse(BaseModel):

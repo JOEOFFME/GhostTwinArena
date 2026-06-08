@@ -77,15 +77,15 @@
   },
 
   "avatars": {
-    "idle":        { "asset": "hadji_idle.svg",        "mood": "calm",        "label": "Waiting for kickoff" },
-    "listening":   { "asset": "hadji_listening.svg",   "mood": "attentive",   "label": "Listening to you" },
-    "thinking":    { "asset": "hadji_thinking.svg",    "mood": "pensive",     "label": "Thinking it over" },
-    "neutral":     { "asset": "hadji_neutral.svg",     "mood": "warm",        "label": "Watching the game" },
-    "tense":       { "asset": "hadji_tense.svg",       "mood": "focused",     "label": "On edge" },
-    "frustrated":  { "asset": "hadji_frustrated.svg",  "mood": "fired-up",    "label": "Not happy" },
-    "euphoric":    { "asset": "hadji_euphoric.svg",    "mood": "ecstatic",    "label": "Going wild" },
-    "celebrating": { "asset": "hadji_celebrating.svg", "mood": "explosive",   "label": "GOOOAL!" },
-    "heartbroken": { "asset": "hadji_heartbroken.svg", "mood": "deflated",    "label": "Heartbroken" }
+    "idle":        { "asset": "hadji_idle.png",        "mood": "calm",        "label": "Waiting for kickoff" },
+    "listening":   { "asset": "hadji_listening.png",   "mood": "attentive",   "label": "Listening to you" },
+    "thinking":    { "asset": "hadji_thinking.png",    "mood": "pensive",     "label": "Thinking it over" },
+    "neutral":     { "asset": "hadji_neutral.png",     "mood": "warm",        "label": "Watching the game" },
+    "tense":       { "asset": "hadji_tense.png",       "mood": "focused",     "label": "On edge" },
+    "frustrated":  { "asset": "hadji_frustrated.png",  "mood": "fired-up",    "label": "Not happy" },
+    "euphoric":    { "asset": "hadji_euphoric.png",    "mood": "ecstatic",    "label": "Going wild" },
+    "celebrating": { "asset": "hadji_celebrating.png", "mood": "explosive",   "label": "GOOOAL!" },
+    "heartbroken": { "asset": "hadji_heartbroken.png", "mood": "deflated",    "label": "Heartbroken" }
   },
 
   "guardrails": [

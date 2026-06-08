@@ -47,19 +47,37 @@ def list_legends() -> list:
             "accent_color": p.get("accent_color"),
             "idle_avatar": resolve_avatar(p["id"], "idle"),
         })
+    out.sort(key=lambda x: (x["locked"], x["unlock_cost_coins"], x["name"]))
     return out
 
 
 def resolve_avatar(legend_id: str, state: str) -> dict:
     """Return the avatar descriptor for a legend in a given state.
 
-    Always returns something usable, falling back to 'neutral' then 'idle'.
-    The 'url' points at the served static asset so the frontend just renders it.
+    Prefers a real raster image (.jpg/.png/.webp) if one exists in static/avatars/
+    for the given legend+state combination. Falls back to the SVG filename recorded
+    in the profile JSON, then to neutral/idle. Degrades gracefully — no KeyError.
     """
     legend = get_legend(legend_id)
     avatars = legend.get("avatars", {})
     chosen = avatars.get(state) or avatars.get("neutral") or avatars.get("idle") or {}
-    asset = chosen.get("asset", f"{legend_id}_neutral.svg")
+    # SVG asset defined in the profile JSON
+    svg_asset = chosen.get("asset", f"{legend_id}_{state}.svg")
+
+    # Try to find a raster image for this legend+state in static/avatars/
+    avatars_dir = os.path.join(
+        os.path.dirname(__file__),   # app/legends/
+        "..", "..", "static", "avatars"
+    )
+    avatars_dir = os.path.normpath(avatars_dir)
+    raster_asset = None
+    for ext in (".png", ".webp", ".jpg", ".jpeg"):
+        candidate = f"{legend_id}_{state}{ext}"
+        if os.path.isfile(os.path.join(avatars_dir, candidate)):
+            raster_asset = candidate
+            break
+
+    asset = raster_asset or svg_asset
     return {
         "state": state,
         "mood": chosen.get("mood", "warm"),

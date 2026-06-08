@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 class Settings:
@@ -11,15 +11,20 @@ class Settings:
     ELEVENLABS_API_KEY: str = os.getenv("ELEVENLABS_API_KEY", "")
     ELEVENLABS_VOICE_ID: str = os.getenv("ELEVENLABS_VOICE_ID", "")
 
-    # Model used for legend reactions. Haiku = fastest/cheapest for live audio reactions;
-    # override with a stronger model for long-form chat if you like.
+    # --- Gemini (primary LLM) ---
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+
+    # Legacy Claude settings kept for compatibility
     CLAUDE_MODEL: str = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")
     REACTION_MAX_TOKENS: int = int(os.getenv("REACTION_MAX_TOKENS", "220"))
     CHAT_MAX_TOKENS: int = int(os.getenv("CHAT_MAX_TOKENS", "600"))
 
     # --- Demo / data mode ---
+    # Set SIMULATION_MODE=false to activate the RapidAPI live football feed
     SIMULATION_MODE: bool = os.getenv("SIMULATION_MODE", "true").lower() == "true"
     FOOTBALL_API_KEY: str = os.getenv("FOOTBALL_API_KEY", "")
+    RAPIDAPI_HOST: str = os.getenv("RAPIDAPI_HOST", "api-football-v1.p.rapidapi.com")
 
     # --- Monetization gates (free tier) ---
     FREE_QUIZ_PER_DAY: int = int(os.getenv("FREE_QUIZ_PER_DAY", "5"))
@@ -39,3 +44,4 @@ class Settings:
 
 
 settings = Settings()
+

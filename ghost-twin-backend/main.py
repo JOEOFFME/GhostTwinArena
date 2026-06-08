@@ -3,6 +3,8 @@
 Run:  uvicorn main:app --reload --port 8000
 Docs: http://localhost:8000/docs
 """
+import asyncio
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -17,12 +19,27 @@ from app.match.state_machine import current_match
 from app.match.simulator import reset_match, trigger, DEMO_SCRIPT
 from app.persona.prompt_engine import build_system_prompt
 from app.persona.darija import with_language_hint
-from app.llm.claude_client import llm
+from app.llm.gemini_client import llm
 from app.voice.tts_client import synthesize
 from app.store.memory_store import store
 from app.games import reactions, quiz, what_he_said, predictions
 
-app = FastAPI(title="Ghost Twin Arena API", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Start background tasks on server boot."""
+    if not settings.SIMULATION_MODE and settings.FOOTBALL_API_KEY:
+        from app.match.live_fetcher import live_poll_loop
+        task = asyncio.create_task(live_poll_loop())
+        print("[startup] Live football poller started (RapidAPI)")
+    else:
+        task = None
+        print(f"[startup] Simulation mode ON — using manual events")
+    yield
+    if task:
+        task.cancel()
+
+
+app = FastAPI(title="Ghost Twin Arena API", version="1.0.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["*"],
                    allow_methods=["*"], allow_headers=["*"])
 app.mount("/static", StaticFiles(directory=settings.STATIC_DIR), name="static")
@@ -43,9 +60,15 @@ def health():
 
 # ============================ LEGENDS & AVATARS ============================
 @app.get("/legends")
-def legends():
+def legends(user_id: str = "guest"):
     """Home screen - all selectable legends with lock state and idle avatar."""
-    return {"legends": list_legends()}
+    u = store.user(user_id)
+    items = []
+    for legend in list_legends():
+        profile_locked = legend.get("locked", True)
+        owned = legend["id"] in u.unlocked_legends
+        items.append({**legend, "locked": profile_locked and not owned})
+    return {"legends": items}
 
 
 @app.get("/legends/{legend_id}/avatar/{state}")
@@ -103,7 +126,7 @@ async def chat(req: ChatRequest, legend_id: str = "hadji"):
     """Free-form multilingual chat with the legend during the match."""
     state = current_match.to_dict()
     system = build_system_prompt(legend_id, state)
-    user_msg = with_language_hint(req.message)
+    user_msg = with_language_hint(req.message, req.preferred_language)
     text = llm.chat(req.user_id, system, f"[MATCH: {state['description']}]\n{user_msg}")
     audio = await synthesize(text)
     return {

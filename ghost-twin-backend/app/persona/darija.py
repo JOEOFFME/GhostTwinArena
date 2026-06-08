@@ -19,6 +19,12 @@ HINTS = {
     "english": "[Fan writes in English. Reply in English.]",
 }
 
+PREFERRED_HINTS = {
+    "fr": "[The fan prefers French. Reply in warm, conversational French.]",
+    "en": "[The fan prefers English. Reply in clear, natural English.]",
+    "ar": "[The fan prefers Arabic. Reply in warm Moroccan Arabic (Darija is fine in emotional moments).]",
+}
+
 
 def detect_language(text: str) -> str:
     if ARABIC_RANGE.search(text):
@@ -33,6 +39,8 @@ def detect_language(text: str) -> str:
     return "french"
 
 
-def with_language_hint(text: str) -> str:
+def with_language_hint(text: str, preferred: str | None = None) -> str:
+    if preferred and preferred in PREFERRED_HINTS:
+        return f"{PREFERRED_HINTS[preferred]}\n{text}"
     lang = detect_language(text)
     return f"{HINTS.get(lang, HINTS['french'])}\n{text}"
